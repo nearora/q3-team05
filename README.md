@@ -64,3 +64,21 @@ there is a REST server running with implementations to satisfy the tests.
    RS_HOST: HTTP host to access the Reservation REST service
    US_HOST: HTTP host to access the Reservation Update REST service (queue reader)
    ```
+
+Development Setup
+-----------------
+
+1. Download Go - https://golang.org/dl/
+2. Install VirtualBox - https://www.virtualbox.org/wiki/Downloads
+3. Install Vagrant - https://www.vagrantup.com/downloads.html
+3. Install Docker - https://docs.docker.com/docker-for-mac/
+4. Install SoapUI - https://www.soapui.org/downloads/soapui.html
+4. Install and start journal
+
+         export GOPATH=${HOME}/go
+         cd ${HOME}/go
+         mkdir -p $GOPATH/src/github.com/tdhite
+         cd $GOPATH/src/github.com/tdhite
+         git clone http://gerrit.eng.vmware.com:8080/q3-training-journal
+         cd q3-training-journal
+         make
