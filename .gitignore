@@ -17,3 +17,15 @@
 coverage
 node_modules
 npm-debug.log
+
+# Python
+*.pyc
+build/
+*egg-info/
+dist/
+
+# SoapUI
+*-FAILED.txt
+
+# Vagrant
+.vagrant/

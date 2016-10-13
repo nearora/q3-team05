@@ -70,7 +70,6 @@ Development Setup
 
 1. Download Go - https://golang.org/dl/
 2. Install VirtualBox - https://www.virtualbox.org/wiki/Downloads
-3. Install Vagrant - https://www.vagrantup.com/downloads.html
 3. Install Docker - https://docs.docker.com/docker-for-mac/
 4. Install SoapUI - https://www.soapui.org/downloads/soapui.html
 4. Install and start journal
@@ -82,3 +81,30 @@ Development Setup
          git clone http://gerrit.eng.vmware.com:8080/q3-training-journal
          cd q3-training-journal
          make
+
+Q3-Team05 Quickstart
+--------------------
+
+1. Setup local environment for development
+
+		sudo easy_install pip
+		sudo pip install virtualenv
+		mkdir ~/virtual_envs
+		virtualenv ~/virtual_envs/q3-team05
+		source ~/virtual_envs/q3-team05/bin/activate
+		cd /path/to/q3-team05/labreserved
+		python setup.py develop
+
+2. Build/Run labreserved in Docker container
+
+		docker build -t labreserved:latest .
+		# I use 5001 since my IDE runs API on 5000 when developing
+		lab=$(docker run -d -p 5001:5000 labreserved)
+		# (Optional) Tail container logs
+		docker logs -f $lab
+
+3. Stopping/Removing container
+
+		docker stop $lab
+		docker rm $lab
+
