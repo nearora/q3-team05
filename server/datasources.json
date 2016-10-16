@@ -2,5 +2,51 @@
   "db": {
     "name": "db",
     "connector": "memory"
-  }
+  },
+	"q3TrainingJournal": {
+		"connector": "rest",
+		"debug": "false",
+		"operations": [
+			{
+				"template": {
+					"method": "GET",
+					"url": "http://locahost:8080/api/topics",
+					"headers": {
+						"accepts": "application/json",
+						"content-type": "application/json"
+					}
+				},
+				"functions": {
+					"getTopics": []
+				}
+			},
+			{
+				"template": {
+					"method": "GET",
+					"url": "http://locahost:8080/api/{topic}",
+					"headers": {
+						"accepts": "application/json",
+						"content-type": "application/json"
+					}
+				},
+				"functions": {
+					"getMessageFromTopic": ["topic"]
+				}
+			},
+			{
+					"template": {
+					"method": "POST",
+					"url": "http://locahost:8080/api/{topic}",
+					"headers": {
+						"accepts": "application/json",
+						"content-type": "application/json"
+					},
+					"body": "{message}"
+				},
+				"functions": {
+					"writeMessageToTopic": ["topic", "message"]
+				}
+			}
+		]
+	}
 }

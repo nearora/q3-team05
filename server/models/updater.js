@@ -9,6 +9,7 @@ module.exports = function(Updater) {
       if (updater && updater.active) {
         // TODO: Read from queue any new reservation requests.
         console.log('TODO: Check reservation queue.');
+		// TODO: Write to blob service
       }
     });
     callback(null);
