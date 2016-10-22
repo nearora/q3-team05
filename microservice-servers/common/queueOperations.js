@@ -8,9 +8,9 @@ var isEmpty = require('is-empty');
 var url = require('url');
 
 module.exports.readFromQueue = function(q) {
-	var messagingServiceBaseURL = process.argv[2];
+	var messagingServiceBaseURL = process.env.MESSAGING_SERVICE_BASE_URL;
 	if (isEmpty(messagingServiceBaseURL)) {
-		var errorMsg = "Messaging service base URL not specified. Specify as first parameter during start-up.";
+		var errorMsg = "Set environment variable MESSAGING_SERVICE_BASE_URL to messaging service's base URL";
 		console.log(errorMsg);
 		throw(errorMsg);
 	}
@@ -35,9 +35,9 @@ module.exports.readFromQueue = function(q) {
 };
 
 module.exports.writeToQueue = function(q, m) {
-	var messagingServiceBaseURL = process.argv[2];
+	var messagingServiceBaseURL = process.env.MESSAGING_SERVICE_BASE_URL;
 	if (isEmpty(messagingServiceBaseURL)) {
-		var errorMsg = "Messaging service base URL not specified. Specify as first parameter during start-up.";
+		var errorMsg = "Set environment variable MESSAGING_SERVICE_BASE_URL to messaging service's base URL";
 		console.log(errorMsg);
 		throw(errorMsg);
 	}
