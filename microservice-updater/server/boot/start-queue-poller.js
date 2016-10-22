@@ -18,81 +18,89 @@ module.exports = function(app, cb) {
 	var delay = 5000;
 	
 	var timeoutId = setInterval(function() {
-		console.log("Updater queue poller called");
-		// Read the current blob data
-		var blobContent = blobOperations.readFromBlob();
-		// Parse servers section into servers array
-		var servers = blobContent.servers;
-		if (isEmpty(servers)) {
-			console.log("Found empty servers. Initializing...");
-			servers = new Array();
-		} else {
-			console.log("Found servers: " + servers);
-		}
-		// Parse reservations section into reservations array
-		var reservations = blobContent.reservations;
-		if (isEmpty(reservations)) {
-			console.log("Found empty reservations. Initializing...");
-			reservations = new Array();
-		} else {
-			console.log("Found reservations: " + reservations);
-		}
-				
-		// Check queue for messages in the following topics
-		
-		// server-create-requests and create the servers requested
-		console.log("Checking for messages in queue " + serverCreateRequestsQueueURL);
-		while(true) {
-			var m = queueOperations.readFromQueue(serverCreateRequestsQueueURL);
-			console.log(m);
-			if (isEmpty(m)) {
-				break;
-			} else {
-				m.id = servers.length;
-				servers.push(m);
+		app.models.Updater.findById(1, function(err, u) {
+			console.log("Updater queue poller called");
+			
+			if (!u.active) {
+				console.log("Updater is set to inactive. Skipping this run...")
+				return;
 			}
-		}
-		
-		// reservation-approvals-approved
-		// and update the reservations that were approved
-		console.log("Checking for messages in queue " + reservationApprovalsApprovedQueueURL);
-		while(true) {
-			var m = queueOperations.readFromQueue(reservationApprovalsApprovedQueueURL);
-			console.log(m);
-			if (isEmpty(m)) {
-				break;
+			
+			// Read the current blob data
+			var blobContent = blobOperations.readFromBlob();
+			// Parse servers section into servers array
+			var servers = blobContent.servers;
+			if (isEmpty(servers)) {
+				console.log("Found empty servers. Initializing...");
+				servers = new Array();
 			} else {
-				for (var i = 0; i < reservations.length; i++) {
-					if (reservations[i].id == m.id) {
-						reservations[i].approved = true;
-						break;
+				console.log("Found servers: " + servers);
+			}
+			// Parse reservations section into reservations array
+			var reservations = blobContent.reservations;
+			if (isEmpty(reservations)) {
+				console.log("Found empty reservations. Initializing...");
+				reservations = new Array();
+			} else {
+				console.log("Found reservations: " + reservations);
+			}
+					
+			// Check queue for messages in the following topics
+			
+			// server-create-requests and create the servers requested
+			console.log("Checking for messages in queue " + serverCreateRequestsQueueURL);
+			while(true) {
+				var m = queueOperations.readFromQueue(serverCreateRequestsQueueURL);
+				console.log(m);
+				if (isEmpty(m)) {
+					break;
+				} else {
+					m.id = servers.length;
+					servers.push(m);
+				}
+			}
+			
+			// reservation-approvals-approved
+			// and update the reservations that were approved
+			console.log("Checking for messages in queue " + reservationApprovalsApprovedQueueURL);
+			while(true) {
+				var m = queueOperations.readFromQueue(reservationApprovalsApprovedQueueURL);
+				console.log(m);
+				if (isEmpty(m)) {
+					break;
+				} else {
+					for (var i = 0; i < reservations.length; i++) {
+						if (reservations[i].id == m.id) {
+							reservations[i].approved = true;
+							break;
+						}
 					}
 				}
 			}
-		}
-		
-		// reservation-create-requests
-		// Add message to topic reservation-approvals-requested
-		// Create the reservations requested
-		console.log("Checking for messages in queue " + reservationCreateRequestsQueueURL);
-		while(true) {
-			var m = queueOperations.readFromQueue(reservationCreateRequestsQueueURL);
-			console.log(m);
-			if (isEmpty(m)) {
-				break;
-			} else {
-				m.id = reservations.length;
-				reservations.push(m);
-				queueOperations.writeToQueue(reservationApprovalsRequestedQueueURL, m);
+			
+			// reservation-create-requests
+			// Add message to topic reservation-approvals-requested
+			// Create the reservations requested
+			console.log("Checking for messages in queue " + reservationCreateRequestsQueueURL);
+			while(true) {
+				var m = queueOperations.readFromQueue(reservationCreateRequestsQueueURL);
+				console.log(m);
+				if (isEmpty(m)) {
+					break;
+				} else {
+					m.id = reservations.length;
+					reservations.push(m);
+					queueOperations.writeToQueue(reservationApprovalsRequestedQueueURL, m);
+				}
 			}
-		}
-		
-		// Add servers to new blob data
-		blobContent.servers = servers;
-		// Add reservations to new blob data
-		blobContent.reservations = reservations;
-		// Write the new blob data, replacing the older blob data
-		blobOperations.writeToBlob(blobContent);
+			
+			// Add servers to new blob data
+			blobContent.servers = servers;
+			// Add reservations to new blob data
+			blobContent.reservations = reservations;
+			// Write the new blob data, replacing the older blob data
+			blobOperations.writeToBlob(blobContent);
+		})	
 	}, delay);
 
 	/*
