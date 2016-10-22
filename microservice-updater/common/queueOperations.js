@@ -48,12 +48,14 @@ module.exports.readFromQueue = function(q) {
 */
 
 module.exports.writeToQueue = function(q, m) {
-	var body = '{"message": "' + btoa(JSON.stringify(m)) + '"}';
+	var body = new Object();
+	body.message = btoa(JSON.stringify(m));
+	
 	httpreq.post(q, {
-		headers:{
-			'Content-Type': 'application/json'
-		},
-		body: body
+			headers:{
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(body)
 		}, function (err, res){
 			if (err){
 				console.log(err);

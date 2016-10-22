@@ -7,6 +7,8 @@ const reservationCreateRequestsQueueURL =
 	'http://localhost:8080/api/topic/reservation-create-requests';
 const reservationApprovalsRequestedQueueURL =
 	'http://localhost:8080/api/topic/reservation-approvals-requested';
+const reservationApprovalsApprovedQueueURL =
+	'http://localhost:8080/api/topic/reservation-approvals-approved';
 
 var isEmpty = require('is-empty');		
 var queueOperations = require('../../common/queueOperations.js');
@@ -46,12 +48,28 @@ module.exports = function(app, cb) {
 			if (isEmpty(m)) {
 				break;
 			} else {
+				m.id = servers.length;
 				servers.push(m);
 			}
 		}
 		
 		// reservation-approvals-approved
 		// and update the reservations that were approved
+		console.log("Checking for messages in queue " + reservationApprovalsApprovedQueueURL);
+		while(true) {
+			var m = queueOperations.readFromQueue(reservationApprovalsApprovedQueueURL);
+			console.log(m);
+			if (isEmpty(m)) {
+				break;
+			} else {
+				for (var i = 0; i < reservations.length; i++) {
+					if (reservations[i].id == m.id) {
+						reservations[i].approved = true;
+						break;
+					}
+				}
+			}
+		}
 		
 		// reservation-create-requests
 		// Add message to topic reservation-approvals-requested
@@ -63,6 +81,7 @@ module.exports = function(app, cb) {
 			if (isEmpty(m)) {
 				break;
 			} else {
+				m.id = reservations.length;
 				reservations.push(m);
 				queueOperations.writeToQueue(reservationApprovalsRequestedQueueURL, m);
 			}

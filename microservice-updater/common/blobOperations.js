@@ -30,13 +30,17 @@ module.exports.readFromBlob = function() {
 };
 
 module.exports.writeToBlob = function(c) {
-	var body = '{"id": 1987, "name": "team05_blob", "version": "v1", "content": "' + btoa(JSON.stringify(c)) + '"}';
+	var body = new Object();
+	body.id = 1987;
+	body.name = "team05_blob";
+	body.version = "v1";
+	body.content = btoa(JSON.stringify(c));
 	
 	try {
 		var r = synchttpreq('POST', blobServicePostURL,
 			{
 				headers:{ 'Content-Type': 'application/json' },
-				body: body
+				body: JSON.stringify(body)
 			});
 		
 		console.log(JSON.parse(r.getBody()));		

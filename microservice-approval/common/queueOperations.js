@@ -1,7 +1,28 @@
 'use strict';
 
 var httpreq = require('httpreq');
+var synchttpreq = require('sync-request');
 var btoa = require('btoa');
+var atob = require('atob');
+var isEmpty = require('is-empty');
+
+module.exports.readFromQueue = function(q) {
+	var c = new Object();
+	
+	try {
+		var r = JSON.parse(synchttpreq('GET', q).getBody());
+		
+		if (!isEmpty(r.message)) {
+			c = JSON.parse(atob(r.message));	
+		}
+		
+		console.log(c);		
+	} catch (e) {
+		console.log(e);
+	}
+
+	return c;
+};
 
 module.exports.writeToQueue = function(q, m) {
 	var body = new Object();
