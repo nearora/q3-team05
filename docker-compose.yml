@@ -1,18 +1,26 @@
- version: '2'
- services:
-   approval:
-     build: microservice-approval/
-     ports:
-       - "3000:3000"
-   reservations:
-      build: microservice-reservations/
-      ports:
-       - "3001:3001"
-   servers:
-      build: microservice-servers/
-      ports:
-       - "3002:3002"
-   updater:
-      build: microservice-updater/
-      ports:
-       - "3003:3003"
+version: '2'
+services:
+    reservations:
+        build: microservice-reservations/
+        environment:
+            - MESSAGING_SERVICE_URL=http://localhost:8080/
+        ports:
+            - "3001:3001"
+    servers:
+        build: microservice-servers/
+        environment:
+            - MESSAGING_SERVICE_URL=http://localhost:8080/
+        ports:
+            - "3002:3002"
+    updater:
+        build: microservice-updater/
+        environment:
+            - MESSAGING_SERVICE_URL=http://localhost:8080/
+        ports:
+            - "3003:3003"
+    approval:
+        build: microservice-approval/
+        environment:
+            - MESSAGING_SERVICE_URL=http://localhost:8080/
+        ports:
+            - "3004:3004"
