@@ -1,14 +1,10 @@
 // Updater service
 
 'use strict';
-const serverCreateRequestsQueueURL =
-	'http://localhost:8080/api/topic/server-create-requests';
-const reservationCreateRequestsQueueURL =
-	'http://localhost:8080/api/topic/reservation-create-requests';
-const reservationApprovalsRequestedQueueURL =
-	'http://localhost:8080/api/topic/reservation-approvals-requested';
-const reservationApprovalsApprovedQueueURL =
-	'http://localhost:8080/api/topic/reservation-approvals-approved';
+const serverCreateRequestsQueue = 'server-create-requests';
+const reservationCreateRequestsQueue = 'reservation-create-requests';
+const reservationApprovalsRequestedQueue = 'reservation-approvals-requested';
+const reservationApprovalsApprovedQueue = 'reservation-approvals-approved';
 
 var isEmpty = require('is-empty');		
 var queueOperations = require('../../common/queueOperations.js');
@@ -48,9 +44,9 @@ module.exports = function(app, cb) {
 			// Check queue for messages in the following topics
 			
 			// server-create-requests and create the servers requested
-			console.log("Checking for messages in queue " + serverCreateRequestsQueueURL);
+			console.log("Checking for messages in queue " + serverCreateRequestsQueue);
 			while(true) {
-				var m = queueOperations.readFromQueue(serverCreateRequestsQueueURL);
+				var m = queueOperations.readFromQueue(serverCreateRequestsQueue);
 				console.log(m);
 				if (isEmpty(m)) {
 					break;
@@ -62,9 +58,9 @@ module.exports = function(app, cb) {
 			
 			// reservation-approvals-approved
 			// and update the reservations that were approved
-			console.log("Checking for messages in queue " + reservationApprovalsApprovedQueueURL);
+			console.log("Checking for messages in queue " + reservationApprovalsApprovedQueue);
 			while(true) {
-				var m = queueOperations.readFromQueue(reservationApprovalsApprovedQueueURL);
+				var m = queueOperations.readFromQueue(reservationApprovalsApprovedQueue);
 				console.log(m);
 				if (isEmpty(m)) {
 					break;
@@ -81,16 +77,16 @@ module.exports = function(app, cb) {
 			// reservation-create-requests
 			// Add message to topic reservation-approvals-requested
 			// Create the reservations requested
-			console.log("Checking for messages in queue " + reservationCreateRequestsQueueURL);
+			console.log("Checking for messages in queue " + reservationCreateRequestsQueue);
 			while(true) {
-				var m = queueOperations.readFromQueue(reservationCreateRequestsQueueURL);
+				var m = queueOperations.readFromQueue(reservationCreateRequestsQueue);
 				console.log(m);
 				if (isEmpty(m)) {
 					break;
 				} else {
 					m.id = reservations.length;
 					reservations.push(m);
-					queueOperations.writeToQueue(reservationApprovalsRequestedQueueURL, m);
+					queueOperations.writeToQueue(reservationApprovalsRequestedQueue, m);
 				}
 			}
 			

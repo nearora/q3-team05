@@ -2,8 +2,7 @@
 
 'use strict';
 
-const reservationCreateRequestsQueueURL =
-	'http://localhost:8080/api/topic/reservation-create-requests';
+const reservationCreateRequestsQueue = 'reservation-create-requests';
 	
 var queueOperations = require('../queueOperations.js');
 var blobOperations = require('../blobOperations.js');
@@ -19,7 +18,7 @@ module.exports = function(Reservation) {
 	Reservation.create = function(d, cb) {
 		console.log('Reservation.create called')
 		// Write a new reservation to the queue
-		queueOperations.writeToQueue(reservationCreateRequestsQueueURL, d);
+		queueOperations.writeToQueue(reservationCreateRequestsQueue, d);
 		cb(null, d);
 	}
 };

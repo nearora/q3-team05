@@ -2,7 +2,7 @@
 
 'use strict';
 
-const serverCreateRequestsQueueURL =
+const serverCreateRequestsQueue =
 	'http://localhost:8080/api/topic/server-create-requests';
 
 var queueOperations = require('../queueOperations.js');
@@ -19,7 +19,7 @@ module.exports = function(Server) {
 	Server.create = function(d, cb) {
 		console.log('Server.create called')
 		// Write a new server to the queue
-		queueOperations.writeToQueue(serverCreateRequestsQueueURL, d);
+		queueOperations.writeToQueue(serverCreateRequestsQueue, d);
 		cb(null, d);
 	}
 };

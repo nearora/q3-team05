@@ -2,10 +2,8 @@
 
 'use strict';
 
-const reservationApprovalsRequestedQueueURL =
-	'http://localhost:8080/api/topic/reservation-approvals-requested';
-const reservationApprovalsApprovedQueueURL =
-	'http://localhost:8080/api/topic/reservation-approvals-approved';
+const reservationApprovalsRequestedQueue = 'reservation-approvals-requested';
+const reservationApprovalsApprovedQueue = 'reservation-approvals-approved';
 const approvalServiceURL =
 	'http://approval.vmwaredevops.appspot.com/api/v1/approvables';
 
@@ -33,7 +31,7 @@ module.exports = function(app, cb) {
 					console.log(res.body);
 					var approvals = JSON.parse(res.body);
 					for (var i = 0; i < approvals.length; i++) {
-						queueOperations.writeToQueue(reservationApprovalsApprovedQueueURL, JSON.parse(atob(approvals[i].description)));
+						queueOperations.writeToQueue(reservationApprovalsApprovedQueue, JSON.parse(atob(approvals[i].description)));
 						httpreq.delete(approvalServiceURL + "/" + approvals[i].id,
 							function (err, res){
 								if (err){
@@ -52,9 +50,9 @@ module.exports = function(app, cb) {
 		// Check queue for messages in the following topics
 		// reservation-approvals-requested
 		// And push to the approvals service
-		console.log("Checking for messages in queue " + reservationApprovalsRequestedQueueURL);
+		console.log("Checking for messages in queue " + reservationApprovalsRequestedQueue);
 		while(true) {
-			var m = queueOperations.readFromQueue(reservationApprovalsRequestedQueueURL);
+			var m = queueOperations.readFromQueue(reservationApprovalsRequestedQueue);
 			console.log(m);
 			if (isEmpty(m)) {
 				break;
