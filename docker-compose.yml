@@ -28,6 +28,7 @@ services:
     build: ./q3-training-journal
     image: q3-training-journal
     container_name: q3-training-journal
+    command: /q3-training-journal -l 8080 -t .
     ports:
       - 8080:8080
  
@@ -67,17 +68,13 @@ services:
     ports:
       - 3004:3004
 
-#  reservation-app:
-#    build: ./reservation-app
-#    image: team5/reservation-app
-#    container_name: team5-reservation-app
-#    links:
-#      - kafka-service
-#    depends_on:
-#      - kafka-service
-#    environment:
-#      - MESSAGING_SERVICE="localhost:2181"
-#      - RESERVATION_SERVICE="http://localhost:3001"
-#      - SERVER_SERVICE="http://localhost:3002"
-#    ports:
-#      - 8090:8090
+  reservation-app:
+    build: ./reservation-app
+    image: team5/reservation-app
+    container_name: team5-reservation-app
+    environment:
+      - MESSAGING_SERVICE="messaging:8080"
+      - RESERVATION_SERVICE="http://reservations:3001"
+      - SERVER_SERVICE="http://servers:3002"
+    ports:
+      - 8090:8090
