@@ -19,7 +19,7 @@ services:
     environment:
       KAFKA_ADVERTISED_HOST_NAME: kafka-service
       KAFKA_ADVERTISED_PORT: 9092
-      KAFKA_CREATE_TOPICS: "server-create-requests:1:1,reservation-approvals-requested:1:1,reservation-approvals-approved:1:1,reservation-create-requests:1:1"
+      KAFKA_CREATE_TOPICS: "server-create-requests:1:1,reservation-approvals-requested:1:1,reservation-approvals-approved:1:1,reservation-create-requests:1:1,TEAM5_SERVERCREATE_REQUEST:1:1"
       KAFKA_ZOOKEEPER_CONNECT: zookeeper-service:2181
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -30,7 +30,7 @@ services:
     image: team5/reservation-service
     container_name: team5-reservation-service
     environment:
-      MESSAGING_SERVICE_URL: "zookeeper-service:2181"
+      MESSAGING_SERVICE_BASE_URL: "zookeeper-service:2181"
     ports:
       - 3001:3001
 
@@ -40,7 +40,7 @@ services:
     image: team5/server-service
     container_name: team5-server-service
     environment:
-      MESSAGING_SERVICE_URL: "zookeeper-service:2181"
+      MESSAGING_SERVICE_BASE_URL: "zookeeper-service:2181"
     ports:
       - 3002:3002
 
@@ -50,7 +50,7 @@ services:
     image: team5/updater-service
     container_name: team5-updater-service
     environment:
-      MESSAGING_SERVICE_URL: "zookeeper-service:2181"
+      MESSAGING_SERVICE_BASE_URL: "zookeeper-service:2181"
     ports:
       - 3003:3003
 
@@ -60,7 +60,7 @@ services:
     image: team5/approval-service
     container_name: team5-approval-service
     environment:
-      MESSAGING_SERVICE_URL: "zookeeper-service:2181"
+      MESSAGING_SERVICE_BASE_URL: "zookeeper-service:2181"
     ports:
       - 3004:3004
 
@@ -75,7 +75,7 @@ services:
       - kafka-service
     environment:
       MESSAGING_SERVICE: "zookeeper-service:2181"
-      RESERVATION_SERVICE: "http://reservation-service:3001"
-      SERVER_SERVICE: "http://server-service:3002"
+      RESERVATION_SERVICE: "http://0.0.0.0:3001"
+      SERVER_SERVICE: "http://0.0.0.0:3002"
     ports:
       - 8090:8090
