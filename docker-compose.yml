@@ -26,41 +26,41 @@ services:
 
   reservations:
     build: ./microservice-reservations
-    hostname: reservation-service
+    hostname: reservations
     image: team5/reservation-service
     container_name: team5-reservation-service
     environment:
-      MESSAGING_SERVICE_BASE_URL: "zookeeper-service:2181"
+      MESSAGING_SERVICE_BASE_URL: "http://zookeeper-service:2181"
     ports:
       - 3001:3001
 
   servers:
     build: ./microservice-servers
-    hostname: server-service
+    hostname: servers
     image: team5/server-service
     container_name: team5-server-service
     environment:
-      MESSAGING_SERVICE_BASE_URL: "zookeeper-service:2181"
+      MESSAGING_SERVICE_BASE_URL: "http://zookeeper-service:2181"
     ports:
       - 3002:3002
 
   updater:
     build: ./microservice-updater
-    hostname: updater-service
+    hostname: updater
     image: team5/updater-service
     container_name: team5-updater-service
     environment:
-      MESSAGING_SERVICE_BASE_URL: "zookeeper-service:2181"
+      MESSAGING_SERVICE_BASE_URL: "http://zookeeper-service:2181"
     ports:
       - 3003:3003
 
   approval:
     build: ./microservice-approval
-    hostname: approval-service
+    hostname: approval
     image: team5/approval-service
     container_name: team5-approval-service
     environment:
-      MESSAGING_SERVICE_BASE_URL: "zookeeper-service:2181"
+      MESSAGING_SERVICE_BASE_URL: "http://zookeeper-service:2181"
     ports:
       - 3004:3004
 
@@ -74,8 +74,8 @@ services:
     depends_on:
       - kafka-service
     environment:
-      MESSAGING_SERVICE: "zookeeper-service:2181"
-      RESERVATION_SERVICE: "http://0.0.0.0:3001"
-      SERVER_SERVICE: "http://0.0.0.0:3002"
+      MESSAGING_SERVICE: "http://zookeeper-service:2181"
+      RESERVATION_SERVICE: "http://reservations:3001"
+      SERVER_SERVICE: "http://servers:3002"
     ports:
       - 8090:8090
