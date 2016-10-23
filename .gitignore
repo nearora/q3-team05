@@ -29,3 +29,5 @@ dist/
 
 # Vagrant
 .vagrant/
+
+q3-training-journal/
