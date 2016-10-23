@@ -1,7 +1,7 @@
 'use strict';
 
-const blobServicePostURL = 'http://blobs.vmwaredevops.appspot.com/api/v1/blobs';
-const blobServiceGetURL = blobServicePostURL + '/1987';
+var blobServicePostURL = 'http://blobs.vmwaredevops.appspot.com/api/v1/blobs';
+var blobServiceGetURL = blobServicePostURL + '/1987';
 
 var httpreq = require('httpreq');
 var synchttpreq = require('sync-request');

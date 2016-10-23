@@ -9,6 +9,7 @@ var url = require('url');
 
 module.exports.readFromQueue = function(q) {
 	var messagingServiceBaseURL = process.env.MESSAGING_SERVICE_BASE_URL;
+	console.log('messagingServiceBaseURL=' + messagingServiceBaseURL);
 	if (isEmpty(messagingServiceBaseURL)) {
 		var errorMsg = "Set environment variable MESSAGING_SERVICE_BASE_URL to messaging service's base URL";
 		console.log(errorMsg);
@@ -16,6 +17,7 @@ module.exports.readFromQueue = function(q) {
 	}
 	
 	q = url.resolve(messagingServiceBaseURL, '/api/topic/' + q);
+	console.log('Derived message queue URL ' + q);
 	
 	var c = new Object();
 	

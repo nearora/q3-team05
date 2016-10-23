@@ -8,6 +8,7 @@
     "posttest": "npm run lint && nsp check"
   },
   "dependencies": {
+    "async": "^2.1.2",
     "atob": "^2.0.3",
     "btoa": "^1.1.2",
     "compression": "^1.0.3",

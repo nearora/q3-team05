@@ -1,10 +1,10 @@
 // Updater service
 
 'use strict';
-const serverCreateRequestsQueue = 'server-create-requests';
-const reservationCreateRequestsQueue = 'reservation-create-requests';
-const reservationApprovalsRequestedQueue = 'reservation-approvals-requested';
-const reservationApprovalsApprovedQueue = 'reservation-approvals-approved';
+var serverCreateRequestsQueue = 'server-create-requests';
+var reservationCreateRequestsQueue = 'reservation-create-requests';
+var reservationApprovalsRequestedQueue = 'reservation-approvals-requested';
+var reservationApprovalsApprovedQueue = 'reservation-approvals-approved';
 
 var isEmpty = require('is-empty');		
 var queueOperations = require('../../common/queueOperations.js');
