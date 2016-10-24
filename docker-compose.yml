@@ -1,0 +1,59 @@
+version: '2'
+
+services:
+
+  messaging:
+    build: ./q3-training-journal
+    image: q3-training-journal
+    container_name: q3-training-journal
+    command: /q3-training-journal -l 8080 -t .
+    ports:
+      - 8080:8080
+
+  reservations:
+    build: ./microservice-reservations
+    image: team5/reservation-service
+    container_name: team5-reservation-service
+    environment:
+      - MESSAGING_SERVICE_BASE_URL=http://messaging:8080
+    ports:
+      - 3001:3001
+
+  servers:
+    build: ./microservice-servers
+    image: team5/server-service
+    container_name: team5-server-service
+    environment:
+      - MESSAGING_SERVICE_BASE_URL=http://messaging:8080
+    ports:
+      - 3002:3002
+
+  updater:
+    build: ./microservice-updater
+    image: team5/updater-service
+    container_name: team5-updater-service
+    environment:
+      - MESSAGING_SERVICE_BASE_URL=http://messaging:8080
+    ports:
+      - 3003:3003
+
+  approval:
+    build: ./microservice-approval
+    image: team5/approval-service
+    container_name: team5-approval-service
+    environment:
+      - MESSAGING_SERVICE_BASE_URL=http://messaging:8080
+    ports:
+      - 3004:3004
+
+  reservation-app:
+    build: ./reservation-app
+    image: team5/reservation-app
+    container_name: team5-reservation-app
+    environment:
+      - MESSAGING_SERVICE=http://messaging:8080
+      - RESERVATION_SERVICE=http://reservations:3001
+      - SERVER_SERVICE=http://servers:3002
+      - APPROV_SERVICE=http://approval:3004
+    ports:
+      - 8090:8090

@@ -1,0 +1,37 @@
+{
+  "name": "reservation",
+  "plural": "reservations",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "Name": {
+      "type": "string",
+      "required": true,
+      "default": "NONAME"
+    },
+    "start_date": {
+      "type": "date",
+      "required": true,
+      "default": "2016-01-01T00:00:00.000Z"
+    },
+    "end_date": {
+      "type": "date",
+      "required": true,
+      "default": "2099-12-31T00:00:00.000Z"
+    },
+    "server_name": {
+      "type": "string"
+    },
+    "approved": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

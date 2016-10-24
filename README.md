@@ -65,14 +65,13 @@ there is a REST server running with implementations to satisfy the tests.
    US_HOST: HTTP host to access the Reservation Update REST service (queue reader)
    ```
 
-Development Setup
------------------
+Quickstart
+----------
 
 1. Download Go - https://golang.org/dl/
-2. Install VirtualBox - https://www.virtualbox.org/wiki/Downloads
-3. Install Docker - https://docs.docker.com/docker-for-mac/
-4. Install SoapUI - https://www.soapui.org/downloads/soapui.html
-4. Install and start journal
+2. Install Docker - https://docs.docker.com/docker-for-mac/
+3. Install SoapUI - https://www.soapui.org/downloads/soapui.html
+4. Install and start journal (all run from this project dir)
 
          export GOPATH=${HOME}/go
          cd ${HOME}/go
@@ -82,29 +81,14 @@ Development Setup
          cd q3-training-journal
          make
 
-Q3-Team05 Quickstart
---------------------
+         # If you have issues starting journal on a mac, follow this process instead
+         docker run -it -v "$PWD":/go/src/github.com/tdhite/q3-training-journal -w /go/src/github.com/tdhite/q3-training-journal golang:1.6 make q3-training-journal
+         docker build -t q3-training-journal --rm=true .
 
-1. Setup local environment for development
+5. Build/start containers
 
-		sudo easy_install pip
-		sudo pip install virtualenv
-		mkdir ~/virtual_envs
-		virtualenv ~/virtual_envs/q3-team05
-		source ~/virtual_envs/q3-team05/bin/activate
-		cd /path/to/q3-team05/labreserved
-		python setup.py develop
+        docker-compose up
+        # or if you want to run it in the background
+        docker-compse up -d
 
-2. Build/Run labreserved in Docker container
-
-		docker build -t labreserved:latest .
-		# I use 5001 since my IDE runs API on 5000 when developing
-		lab=$(docker run -d -p 5001:5000 labreserved)
-		# (Optional) Tail container logs
-		docker logs -f $lab
-
-3. Stopping/Removing container
-
-		docker stop $lab
-		docker rm $lab
-
+6. Access application at http://0.0.0.0/8090/app
