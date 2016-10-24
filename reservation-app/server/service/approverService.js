@@ -6,15 +6,15 @@ var Promise = require('promise'),
 
 
 
-var reservation;
-reservation = {
+var approval;
+approval = {
 
-    urlBase: config.url.reservationService,
+    urlBase: config.url.approvalService,
 
 
     /**
-     * Gets an array of reservations.
-     * Can be filtered by the reservation id
+     * Gets an array of approval.
+     * Can be filtered by the approval id, if implemented
      * @param id
      * @returns {*}
      */
@@ -43,7 +43,7 @@ reservation = {
                     return reject(parsedResponse.error);
                 }
 
-                console.log("Reserverion from Server service reservation: " + parsedResponse.data );
+                console.log("Approvals from Server service Approvals: " + parsedResponse.data );
                 resolve(parsedResponse.data);
             });
 
@@ -54,4 +54,4 @@ reservation = {
 };
 
 
-module.exports = reservation;
+module.exports = approval;

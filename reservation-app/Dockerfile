@@ -8,7 +8,8 @@ COPY . /home/app
 
 RUN npm run clean
 
-RUN npm install
+RUN cd /home/app && npm install
+RUN npm install -g nodemon
 
 RUN cd client && bower --allow-root install
 

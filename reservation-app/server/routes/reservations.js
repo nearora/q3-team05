@@ -11,7 +11,9 @@ var express = require('express'),
  * get an array of reservations
  */
 router.get('/', function (req, res) {
+  //team 5  work. Get approval and set in reservations
 
+//
     reservationService.getReservations()
         .then(
             function (data) {

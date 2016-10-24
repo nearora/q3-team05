@@ -1,28 +1,6 @@
 version: '2'
 
 services:
-#  zookeeper-service:
-#    image: wurstmeister/zookeeper
-#    hostname: zookeeper-service
-#    container_name: team5-zookeeper-service
-#    ports:
-#      - 2181:2181
-#
-#  kafka-service:
-#    image: wurstmeister/kafka
-#    hostname: kafka-service
-#    container_name: team5-kafka-service
-#    depends_on:
-#      - zookeeper-service
-#    ports:
-#      - 9092:9092
-#    environment:
-#      KAFKA_ADVERTISED_HOST_NAME: kafka-service
-#      KAFKA_ADVERTISED_PORT: 9092
-#      KAFKA_CREATE_TOPICS: "server-create-requests:1:1,reservation-approvals-requested:1:1,reservation-approvals-approved:1:1,reservation-create-requests:1:1"
-#      KAFKA_ZOOKEEPER_CONNECT: zookeeper-service:2181
-#    volumes:
-#      - /var/run/docker.sock:/var/run/docker.sock
 
   messaging:
     build: ./q3-training-journal
@@ -31,7 +9,7 @@ services:
     command: /q3-training-journal -l 8080 -t .
     ports:
       - 8080:8080
- 
+
   reservations:
     build: ./microservice-reservations
     image: team5/reservation-service
@@ -73,8 +51,9 @@ services:
     image: team5/reservation-app
     container_name: team5-reservation-app
     environment:
-      - MESSAGING_SERVICE="messaging:8080"
-      - RESERVATION_SERVICE="http://reservations:3001"
-      - SERVER_SERVICE="http://servers:3002"
+      - MESSAGING_SERVICE=http://messaging:8080
+      - RESERVATION_SERVICE=http://reservations:3001
+      - SERVER_SERVICE=http://servers:3002
+      - APPROV_SERVICE=http://approval:3004
     ports:
       - 8090:8090

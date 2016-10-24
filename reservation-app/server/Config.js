@@ -7,14 +7,18 @@ var Config = {
     url: {
 
         messagingProducer: (function () {
-            return process.env.MESSAGING_SERVICE ? process.env.MESSAGING_SERVICE : 'http://localhost:8080/api/topic/';
+            return process.env.MESSAGING_SERVICE ? process.env.MESSAGING_SERVICE : 'messaging:8080';
         })(),
         reservationService: (function () {
-            return process.env.RESERVATION_SERVICE ? process.env.RESERVATION_SERVICE + '/api/reservations' : 'http://0.0.0.0:3001/api/reservations';
+            return process.env.RESERVATION_SERVICE ? process.env.RESERVATION_SERVICE + '/api/reservations' : 'http://reservations:3001/api/reservations';
         })(),
 
         serverService: (function () {
-            return process.env.SERVER_SERVICE ? process.env.SERVER_SERVICE + '/api/servers' : 'http://0.0.0.0:3002/api/servers';
+            return process.env.SERVER_SERVICE ? process.env.SERVER_SERVICE + '/api/servers' : 'http://servers:3002/api/servers';
+        })(),
+
+        approvalService: (function () {
+            return process.env.APPROV_SERVICE ? process.env.APPROV_SERVICE + '/api/approvers' : 'http://approval:3004/api/approvers';
         })()
 
     }
