@@ -19,6 +19,7 @@ module.exports = function(Reservation) {
 		console.log('Reservation.create called');
 		// Write a new reservation to the queue
 		queueOperations.writeToQueue(reservationCreateRequestsQueue, d);
+		d.approved = false;
 		cb(null, d);
 	};
 
